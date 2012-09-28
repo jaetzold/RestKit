@@ -103,20 +103,21 @@ RK_FIX_CATEGORY_BUG(NSString_RKAdditions)
             }
         }
         else {
-            if (kvPair.count == 1 || kvPair.count == 2) {
+            // SJ: changed to get grails array parameters (correctly?) working. Don't know what scheme involving [] they used here.
+            if (kvPair.count == 2) {
                 NSString *key = [[kvPair objectAtIndex:0]
                                  stringByReplacingPercentEscapesUsingEncoding:encoding];
-                NSMutableArray *values = [pairs objectForKey:key];
-                if (nil == values) {
-                    values = [NSMutableArray array];
+                NSString *value = [[kvPair objectAtIndex:1]
+                                   stringByReplacingPercentEscapesUsingEncoding:encoding];
+                id previousValue = [pairs objectForKey:key];
+                if(previousValue==nil) {
+                    [pairs setObject:value forKey:key];
+                } else if([previousValue isKindOfClass:[NSArray class]]) {
+                    [previousValue addObject:value];
+                } else {
+                    NSMutableArray *values = [NSMutableArray array];
                     [pairs setObject:values forKey:key];
-                }
-                if (kvPair.count == 1) {
-                    [values addObject:[NSNull null]];
-
-                } else if (kvPair.count == 2) {
-                    NSString *value = [[kvPair objectAtIndex:1]
-                                       stringByReplacingPercentEscapesUsingEncoding:encoding];
+                    [values addObject:previousValue];
                     [values addObject:value];
                 }
             }

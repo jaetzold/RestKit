@@ -70,7 +70,8 @@
 - (id)initWithBaseURL:(NSURL *)theBaseURL resourcePath:(NSString *)theResourcePath queryParameters:(NSDictionary *)theQueryParameters
 {
     // Merge any existing query parameters with the incoming dictionary
-    NSDictionary *resourcePathQueryParameters = [theResourcePath queryParameters];
+    // SJ: changed to get grails array parameters (correctly?) working. Gotcha: Arrays will not be merged, but instead substituted.
+    NSDictionary *resourcePathQueryParameters = [theResourcePath queryParametersUsingArrays:YES encoding:NSUTF8StringEncoding];
     NSMutableDictionary *mergedQueryParameters = [NSMutableDictionary dictionaryWithDictionary:[theBaseURL queryParameters]];
     [mergedQueryParameters addEntriesFromDictionary:resourcePathQueryParameters];
     [mergedQueryParameters addEntriesFromDictionary:theQueryParameters];

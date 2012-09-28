@@ -101,7 +101,8 @@ RK_FIX_CATEGORY_BUG(NSDictionary_RKAdditions)
                 if ([item isKindOfClass:[NSDictionary class]] || [item isKindOfClass:[NSMutableDictionary class]]) {
                     [item URLEncodeParts:parts path:[path stringByAppendingString:@"[]"]];
                 } else {
-                    [self URLEncodePart:parts path:[path stringByAppendingString:@"[]"] value:item];
+                    // SJ: changed to get grails array parameters (correctly?) working. Don't know what scheme involving [] they used here.
+                    [self URLEncodePart:parts path:path value:item];
                 }
 
             }
